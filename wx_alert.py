@@ -21,7 +21,9 @@ def shorthand_parser(alert_string):
     'Winter' : 'Wint',
     'Stagnation' : 'Stag',
     'Air' : 'Air',
-    'Watch' : 'Watch'
+    'Watch' : 'Watch',
+    'Flash' : 'Flsh',
+    'Flood' : 'Fld'
  }.get(alert_string, "NEW")
 
 #creating flags
@@ -50,11 +52,14 @@ else:
     if("cap_onset" in alert):
       alert_start = dateparser.parse(alert.cap_onset)
     else:
-      start_time = re.search(r'\d{6}T\d{4}Z', alert.value).group()
-      if start_time == "000000T0000Z": #Already started
-        alert_start = datetime.datetime.now(alert_end.tzinfo)
+      if(not(re.search(r'\d{6}T\d{4}Z', alert.value) == None)):
+        start_time = re.search(r'\d{6}T\d{4}Z', alert.value).group()
+        if start_time == "000000T0000Z": #Already started
+          alert_start = datetime.datetime.now(alert_end.tzinfo)
+        else:
+          alert_start = dateparser.parse(start_time).astimezone(alert_end.tzinfo)
       else:
-        alert_start = dateparser.parse(start_time).astimezone(alert_end.tzinfo)
+        alert_start = datetime.datetime.now(alert_end.tzinfo)
     if(alert_end.day > datetime.datetime.now(alert_end.tzinfo).day):
       if(options.short):
         alert_string = alert_end.strftime(" %a %I:%M%p")
