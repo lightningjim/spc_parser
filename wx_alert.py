@@ -23,7 +23,8 @@ def shorthand_parser(alert_string):
     'Air' : 'Air',
     'Watch' : 'Watch',
     'Flash' : 'Flsh',
-    'Flood' : 'Fld'
+    'Flood' : 'Fld',
+    'Heat' : 'Heat'
  }.get(alert_string, "NEW")
 
 #creating flags
